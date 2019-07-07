@@ -1,10 +1,7 @@
 package com.rosu.flights.security;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.rosu.flights.model.Role;
 import com.rosu.flights.model.User;
 import com.rosu.flights.model.UserRole;
-import com.rosu.flights.model.repository.RoleRepository;
 import com.rosu.flights.model.repository.UserRepository;
 import com.rosu.flights.model.repository.UserRoleRepository;
 
@@ -25,15 +21,13 @@ import com.rosu.flights.model.repository.UserRoleRepository;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private UserRepository userRepository;
-	private RoleRepository roleRepository;
 	private UserRoleRepository userRoleRepository;
 
 	@Autowired
-	public UserDetailsServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
+	public UserDetailsServiceImpl(UserRepository userRepository,
 			UserRoleRepository userRoleRepository) {
 		super();
 		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;
 		this.userRoleRepository = userRoleRepository;
 	}
 
@@ -57,17 +51,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		});
 		
 		
-		List<GrantedAuthority> grantedList = new ArrayList<>();
-		if (idsList.size() > 0) {
-			for (Long id : idsList) {
-				System.out.println("FOUND id: " + id);
-				Optional<Role> roleOptional = roleRepository.findById(id);
-				System.out.println(roleOptional.get().getName());
-				GrantedAuthority authority = new SimpleGrantedAuthority(roleOptional.get().getName());
-				grantedList.add(authority);
-			}
-
-		}
+		List<GrantedAuthority> grantedList = new ArrayList<>();		
+		
+        for (Role role : user.getRoles()){
+        	grantedList.add(new SimpleGrantedAuthority(role.getName()));
+        }
 
 		UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(),
 				user.getPassword(), grantedList);
