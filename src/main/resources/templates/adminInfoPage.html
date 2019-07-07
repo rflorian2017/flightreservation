@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>User info</title>
+</head>
+<body>
+	<!-- include _menu -->
+	<th:block th:include="/_menu"></th:block>
+	<h1>Admin info page</h1>
+	<h2>
+		Welcome: <span th:utext="${#request.userPrincipal.name}"></span>
+	</h2>
+	<b>This is a protected page!</b>
+</body>
+</html>
