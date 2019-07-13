@@ -9,10 +9,10 @@ values (1, 'admin1', '$2a$10$Ou3cs.0RBicW88a/lgPcOOIJf33/bK0W9/Ek6gAwh/p0X8DKCqM
 ---
  
 insert into ROLE (ROLE_ID, ROLE_NAME)
-values (1, 'ROLE_ADMIN');
+values (1, 'ADMIN');
  
 insert into ROLE (ROLE_ID, ROLE_NAME)
-values (2, 'ROLE_USER');
+values (2, 'USER');
  
 ---
  

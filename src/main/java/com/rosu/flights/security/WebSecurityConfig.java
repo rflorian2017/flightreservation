@@ -3,10 +3,13 @@ package com.rosu.flights.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -21,6 +24,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		return bCryptPasswordEncoder;
 	}
+	
+	@Bean
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsServiceImpl);
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setAuthoritiesMapper(authoritiesMapper());
+        return provider;
+    }
+
+    @Bean
+    public GrantedAuthoritiesMapper authoritiesMapper(){
+        SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
+        authorityMapper.setConvertToUpperCase(true);
+        authorityMapper.setDefaultAuthority("USER");
+        return authorityMapper;
+    }
+ 
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -28,7 +49,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		// and encrypt password
 
 		
-		auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
+//		auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(passwordEncoder());
+		auth.authenticationProvider(authenticationProvider());
 	}
 
 	@Override
