@@ -61,7 +61,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			.antMatchers("/", "/login", "/logout")
 			.permitAll();
-		
 		// only if the user is logged in as user or admin
 		http
 		.authorizeRequests()
@@ -73,6 +72,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			.antMatchers("/admin")
 			.access("hasRole('ROLE_ADMIN')");
+		
+		http
+		.authorizeRequests()
+		.antMatchers("/passengers")
+		.access("hasRole('ROLE_ADMIN')")
+		.anyRequest().authenticated();
 		
 		// handle form submission
 		http.authorizeRequests()

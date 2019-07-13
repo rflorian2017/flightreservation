@@ -1,0 +1,31 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}"lang="en">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<!-- include _menu -->
+	<th:block th:include="/_menu"></th:block>
+<div layout:fragment="content">
+    <div class="container main-content">
+        <h3>Passenger View</h3>
+        <form method="post" action="#" th:action="${passenger != null} ? '/passengers/'+${passenger.id} : '/passengers'" th:object="${passengerModel}">
+            <div class="form-row">
+                <div class="col">
+                    <input th:id="firstName" th:name="firstName" type="text" class="form-control" placeholder="First Name" th:value="${passenger != null} ? ${passenger.firstName}"/>
+                </div>
+                <div class="col">
+                    <input th:id="lastName" th:name="lastName" type="text" class="form-control" placeholder="Last Name" th:value="${passenger != null} ? ${passenger.lastName}"/>
+                </div>
+            </div>
+            <div class="form-row">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+        <a th:href="@{/passengers}">Return to All Passengers</a>
+    </div>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/js/table.js}"></script>
+</div>
+</body>
+</html>
